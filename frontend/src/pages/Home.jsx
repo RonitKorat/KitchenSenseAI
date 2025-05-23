@@ -92,20 +92,6 @@ const Home = () => {
               Everything you need to optimize your kitchen operations
             </p>
           </motion.div>
-          <div className="mt-50 text-3xl text-white mx-auto flex justify-center gap-4">
-            <Link className="" to="/inventory">
-              AI-Power Inventory
-            </Link>
-            <Link className="" to="/analitics">
-              Smart Analysis
-            </Link>
-            <Link className="" to="/menu">
-              Menu Optimation
-            </Link>
-            <Link className="" to="/waste-prediction">
-              Waste Prediction
-            </Link>
-          </div>
         </section>
       </div>
     </>
