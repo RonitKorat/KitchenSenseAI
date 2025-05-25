@@ -1,39 +1,11 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
+import { useContext } from "react";
+import { FeatureContext } from "../context/featureContext";
 import React from "react";
-import {
-  ChartBarIcon,
-  CameraIcon,
-  SparklesIcon,
-  ChartPieIcon,
-} from "@heroicons/react/24/outline";
 const Home = () => {
-  const features = [
-    {
-      name: "AI-Powered Inventory",
-      description: "Automated inventory tracking using computer vision",
-      icon: CameraIcon,
-      path: "/inventory",
-    },
-    {
-      name: "Smart Analytics",
-      description: "Real-time insights and waste reduction metrics",
-      icon: ChartBarIcon,
-      path: "/analytics",
-    },
-    {
-      name: "Menu Optimization",
-      description: "AI-driven menu suggestions for better efficiency",
-      icon: SparklesIcon,
-      path: "/menu",
-    },
-    {
-      name: "Waste Prediction",
-      description: "Predict and prevent food spoilage",
-      icon: ChartPieIcon,
-      path: "/waste-analysis",
-    },
-  ];
+  const { features } = useContext(FeatureContext);
+
   return (
     <>
       <div className="pt-1">
@@ -81,17 +53,56 @@ const Home = () => {
         </section>
         {/*feature section */}
         <section className="bg-white dark:bg-gray-900 transition-colors duration-300 py-20">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 20, delay: 0.2 }}
-            transition={{ duration: 1, delay: 0.4 }}
-            className="text-white max-w-3xl mx-auto text-center mb-10"
-          >
-            <h1 className="text-4xl mx-auto mb-5">Powerful Features</h1>
-            <p className="mx-auto text-2xl text-purple-800 dark:text-purple-400">
-              Everything you need to optimize your kitchen operations
-            </p>
-          </motion.div>
+          <div>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 20, delay: 0.2 }}
+              transition={{ duration: 1, delay: 0.4 }}
+              className="text-white max-w-3xl mx-auto text-center mb-10"
+            >
+              <h1 className="text-4xl mx-auto mb-5">Powerful Features</h1>
+              <p className="mx-auto text-2xl text-purple-800 dark:text-purple-400">
+                Everything you need to optimize your kitchen operations
+              </p>
+            </motion.div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mt-20">
+              {features.map((feature, index) => (
+                <Link key={feature.name} to={feature.path} className="block">
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.8, delay: index * 0.2 }}
+                    viewport={{ once: true }}
+                    whileHover={{
+                      scale: 1.05,
+                      y: -5,
+                      transition: { duration: 0.2 },
+                    }}
+                    className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 border border-gray-200 dark:border-gray-700 cursor-pointer group"
+                  >
+                    <motion.div
+                      whileHover={{ rotate: 15 }}
+                      transition={{ duration: 0.5 }}
+                    >
+                      <feature.icon className="h-12 w-12 text-purple-600 dark:text-purple-400 mb-4 group-hover:text-purple-500 dark:group-hover:text-purple-300 transition-colors duration-200" />
+                    </motion.div>
+                    <motion.h2
+                      className="text-xl font-semibold text-gray-900 dark:text-white mb-2 group-hover:text-green-600 dark:group-hover:text-purple-400 transition-colors duration-200"
+                      whileHover={{ x: 5 }}
+                    >
+                      {feature.name}
+                    </motion.h2>
+                    <motion.p
+                      className="text-gray-600 dark:text-gray-300 group-hover:text-gray-700 dark:group-hover:text-gray-200 transition-colors duration-200"
+                      whileHover={{ x: 5 }}
+                    >
+                      {feature.description}
+                    </motion.p>
+                  </motion.div>
+                </Link>
+              ))}
+            </div>
+          </div>
         </section>
       </div>
     </>

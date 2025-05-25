@@ -11,24 +11,33 @@ import React from "react";
 import "./App.css";
 import SignIn from "./pages/SignIn";
 import Menu from "./pages/Menu";
+import Navbar from "./components/Navbar";
+import FeatureContextProvider from "./context/featureContext";
 function App() {
   return (
     <>
-      <Router>
-        <Routes>
-          <Route path="/signin" element={<SignIn />} />
-          <Route path="/signup" element={<SignUp />} />
-          <Route path="/" element={<Home />} />
-          <Route path="/home" element={<Home />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/inventory" element={<Inventory />} />
-          <Route path="/analytics" element={<Analytics />} />
-          <Route path="/wasteprediction" element={<WastePrediction />} />
-          <Route path="/menu" element={<Menu />} />
-          <Route path="/features" element={<Features />} />
-        </Routes>
-      </Router>
+      <FeatureContextProvider>
+        <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+          <Router>
+            <Navbar />
+            <main className="pt-15 ">
+              <Routes>
+                <Route path="/signin" element={<SignIn />} />
+                <Route path="/signup" element={<SignUp />} />
+                <Route path="/" element={<Home />} />
+                <Route path="/home" element={<Home />} />
+                <Route path="/dashboard" element={<Dashboard />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/inventory" element={<Inventory />} />
+                <Route path="/analytics" element={<Analytics />} />
+                <Route path="/wasteprediction" element={<WastePrediction />} />
+                <Route path="/menu" element={<Menu />} />
+                <Route path="/features" element={<Features />} />
+              </Routes>
+            </main>
+          </Router>
+        </div>
+      </FeatureContextProvider>
     </>
   );
 }
