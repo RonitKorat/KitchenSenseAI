@@ -1,12 +1,30 @@
-import React from "react";
+import React, { useContext } from "react";
+import { userContext } from "../context/UserContext";
 
 const SignUp = () => {
-  const handleSignUp = () => {
-    console.log("hello");
-
-    
-
-
+  const {
+    email,
+    setEmail,
+    password,
+    confirmPassword,
+    setconfirmPassword,
+    setpassword,
+  } = useContext(userContext);
+  const handleSignUp = async (e) => {
+    e.preventDefault();
+    const user = { email, password, confirmPassword };
+    console.log(email, password, confirmPassword);
+    let result = await fetch("http://127.0.0.1:5000/user", {
+      method: "POST",
+      body: JSON.stringify(user),
+      headers: {
+        "Content-type": "application/json",
+      },
+    });
+    result = await result.json();
+    if (result.ok) {
+      alert("Signup successful!");
+    }
   };
 
   return (
@@ -30,6 +48,8 @@ const SignUp = () => {
                     type="email"
                     name="email"
                     id="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     placeholder="name@company.com"
                     required=""
@@ -45,6 +65,8 @@ const SignUp = () => {
                   <input
                     type="password"
                     name="password"
+                    value={password}
+                    onChange={(e) => setpassword(e.target.value)}
                     id="password"
                     placeholder="••••••••"
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
@@ -61,6 +83,8 @@ const SignUp = () => {
                   <input
                     type="confirm-password"
                     name="confirm-password"
+                    value={confirmPassword}
+                    onChange={(e) => setconfirmPassword(e.target.value)}
                     id="confirm-password"
                     placeholder="••••••••"
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
