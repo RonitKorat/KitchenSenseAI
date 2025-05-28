@@ -43,7 +43,7 @@ const Home = () => {
                 Get Started
               </Link>
               <Link
-                to="/signin"
+                to="/login"
                 className="rounded-full text-purple-500 border-2 px-6 py-3"
               >
                 Sign In

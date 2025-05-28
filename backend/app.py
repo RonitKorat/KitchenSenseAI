@@ -11,13 +11,13 @@ app = Flask(__name__)
 CORS(app)
 
 MONGO_URI = os.getenv("MONGO_URI")
-print("MONGO_URI:", MONGO_URI)
+# print("MONGO_URI:", MONGO_URI)
 
 app.config["MONGO_URI"] = MONGO_URI
 mongo = PyMongo(app)
 
 # Add user route
-@app.route('/user', methods=['POST'])
+@app.route('/user/signup', methods=['POST'])
 def add_user():
     data = request.get_json()
 
@@ -32,7 +32,22 @@ def add_user():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
     
+@app.route('/user/login',methods=['POST'])
+def login_user():
+    data=request.get_json()
+    email=data.get("email")
+    password=data.get("password")
+    print(email,password)
+    
+    if not email or not password:
+        return jsonify({"error":"email and password is required.."}),400
 
+    user=mongo.db.users.find_one({"email":email,"password":password})
+    
+    if not user:
+        return jsonify({"message":"user not found","success":False}),404
 
+    return jsonify({"message":"Login Successful","email":email,"password":password}),201 
+    
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True,port=8000)

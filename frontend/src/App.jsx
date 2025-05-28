@@ -9,7 +9,6 @@ import WastePrediction from "./pages/WastePrediction";
 import Features from "./pages/Features";
 import React from "react";
 import "./App.css";
-import SignIn from "./pages/SignIn";
 import Menu from "./pages/Menu";
 import Navbar from "./components/Navbar";
 import FeatureContextProvider from "./context/featureContext";
@@ -24,7 +23,6 @@ function App() {
               <Navbar />
               <main className="pt-15 ">
                 <Routes>
-                  <Route path="/signin" element={<SignIn />} />
                   <Route path="/signup" element={<SignUp />} />
                   <Route path="/" element={<Home />} />
                   <Route path="/home" element={<Home />} />
