@@ -6,6 +6,9 @@ const Inventory = () => {
   const webcamRef = useRef(null);
   const [capturedImage, setCapturedImage] = useState(null);
   const [isCameraOn, setIsCameraOn] = useState(false);
+  const [images, setImages] = useState([]);
+
+  const [isDragging, setIsDragging] = useState("");
 
   const videoConstraints = {
     width: 640,
@@ -21,6 +24,61 @@ const Inventory = () => {
       const imageSrc = webcamRef.current.getScreenshot();
       setCapturedImage(imageSrc);
     }
+  };
+
+  const handleDragEnter = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(true);
+  };
+
+  const handleDragLeave = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(false);
+  };
+
+  const handleDragOver = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+  };
+
+  const handleOnDrop = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(false);
+
+    const files = Array.from(e.dataTransfer.files);
+    handleFiles(files);
+  };
+
+  const handleFileInput = (e) => {
+    const files = Array.from(e.target.files);
+    handleFiles(files);
+  };
+
+  const handleFiles = (files) => {
+    const imageFiles = files.filter((file) => file.type.startsWith("image/"));
+
+    const newImages = imageFiles.map((file) => ({
+      file,
+      preview: URL.createObjectURL(file),
+      dimensions: null,
+    }));
+
+    newImages.forEach((image) => {
+      const img = new Image();
+      img.onload = () => {
+        image.dimensions = {
+          width: img.width,
+          height: img.height,
+        };
+        setImages((prev) => [...prev, image]);
+      };
+      img.src = image.preview;
+    });
+
+    console.log(newImages);
   };
 
   return (
@@ -49,7 +107,7 @@ const Inventory = () => {
               Real Time Stock Detection
             </h2>
 
-            <div className="bg-gray-800 transition-colors duration-300 mt-5 mx-auto rounded-xl w-[400px] h-[250px] overflow-hidden flex items-center justify-center ">
+            <div className="bg-gray-600 transition-colors duration-300 mt-5 mx-auto rounded-xl w-[400px] h-[250px] overflow-hidden flex items-center justify-center ">
               {isCameraOn && (
                 <Webcam
                   audio={false}
@@ -111,7 +169,43 @@ const Inventory = () => {
             )}
           </div>
         </motion.div>
-        <motion.div></motion.div>
+        <motion.div className="mt-20 w-100 h-100 mx-auto">
+          <div className="mb-8">
+            <div
+              className={`border-2 border-dashed rounded-lg p-8 text-center ${
+                isDragging
+                  ? "border-green-500 bg-green-50 dark:bg-green-900/20"
+                  : "border-gray-300 dark:border-gray-600"
+              }`}
+              onDragEnter={handleDragEnter}
+              onDragOver={handleDragOver}
+              onDragLeave={handleDragLeave}
+              onDrop={handleOnDrop}
+            >
+              <div className="flex space-x-4">
+                <label
+                  htmlFor="file-upload"
+                  className="relative cursor-pointer bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition-all duration-200 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
+                >
+                  <span>Choose Files</span>
+                  <input
+                    id="file-upload"
+                    name="file-upload"
+                    type="file"
+                    // ref={fileInputRef}
+                    className="hidden"
+                    accept="image/*"
+                    multiple
+                    onChange={handleFileInput}
+                  />
+                </label>
+                <div className="text-sm text-gray-500 dark:text-gray-400">
+                  Supports: PNG, JPG, GIF
+                </div>
+              </div>
+            </div>
+          </div>
+        </motion.div>
       </motion.div>
     </>
   );
