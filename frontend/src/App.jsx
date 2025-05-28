@@ -21,7 +21,7 @@ function App() {
           <UserContextProvider>
             <Router>
               <Navbar />
-              <main className="pt-15 ">
+              <main>
                 <Routes>
                   <Route path="/signup" element={<SignUp />} />
                   <Route path="/" element={<Home />} />

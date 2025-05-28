@@ -10,13 +10,13 @@ import {
 export default function Navbar() {
   return (
     <>
-      <motion.div className="flex items-center text-white justify-between  dark:from-gray-900 dark:to-gray-800 transition-colors duration-300">
+      <motion.div className="flex items-center text-white justify-between  dark:from-gray-900 dark:to-gray-800 transition-colors duration-300 h-[75px]">
         {/* <div className="mt-5"> */}
-        <div className="ml-10 text-3xl mt-10 dark:text-purple-400 dark:text-purple-700">
+        <div className="ml-10 text-3xl dark:text-purple-400 dark:text-purple-700">
           <Link to="/home">SmartKitchen</Link>
         </div>
         <div className="mr-20 text-1.5xl">
-          <ul className="flex gap- mt-10">
+          <ul className="flex gap">
             <li className="hover:text-purple-400 px-4 py-2">
               <Link to="/">Home</Link>
             </li>
