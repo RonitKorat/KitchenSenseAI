@@ -169,10 +169,10 @@ const Inventory = () => {
             )}
           </div>
         </motion.div>
-        <motion.div className="mt-20 w-100 h-100 mx-auto">
-          <div className="mb-8">
+        <motion.div className="mt-20">
+          <div>
             <div
-              className={`border-2 border-dashed rounded-lg p-8 text-center ${
+              className={`w-250 h-50 mx-auto border-2 border-dashed rounded-lg p-8 text-center ${
                 isDragging
                   ? "border-green-500 bg-green-50 dark:bg-green-900/20"
                   : "border-gray-300 dark:border-gray-600"
@@ -182,7 +182,7 @@ const Inventory = () => {
               onDragLeave={handleDragLeave}
               onDrop={handleOnDrop}
             >
-              <div className="flex space-x-4">
+              <div className="flex space-x-4 justify-center mt-15 ">
                 <label
                   htmlFor="file-upload"
                   className="relative cursor-pointer bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition-all duration-200 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
