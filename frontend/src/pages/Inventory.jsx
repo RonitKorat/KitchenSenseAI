@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Webcam from "react-webcam";
-
+import axios from "axios";
 const Inventory = () => {
   const webcamRef = useRef(null);
   const [capturedImage, setCapturedImage] = useState(null);
@@ -16,6 +16,28 @@ const Inventory = () => {
     facingMode: "user",
   };
 
+  // useEffect(() => {
+  //   console.log("Updated images:", images);
+  // }, [images]);
+
+  const uploadImages = async () => {
+    console.log(images);
+    const formData = new FormData();
+    for (const image of images) {
+      const response = await fetch(image.preview);
+      const blob = await response.blob();
+      formData.append("images", blob, image.file.name);
+    }
+
+    try {
+      let res = await axios.post("http://127.0.0.1:8000/upload", formData);
+
+      console.log("Upload success", res.data);
+    } catch (error) {
+      console.log("error while uploading..");
+    }
+  };
+
   const startCamera = () => setIsCameraOn(true);
   const stopCamera = () => setIsCameraOn(false);
 
@@ -23,6 +45,8 @@ const Inventory = () => {
     if (webcamRef.current) {
       const imageSrc = webcamRef.current.getScreenshot();
       setCapturedImage(imageSrc);
+
+      // handleUploadCapturedImage(imageSrc);
     }
   };
 
@@ -55,6 +79,7 @@ const Inventory = () => {
   const handleFileInput = (e) => {
     const files = Array.from(e.target.files);
     handleFiles(files);
+    // console.log(files)
   };
 
   const handleFiles = (files) => {
@@ -66,19 +91,26 @@ const Inventory = () => {
       dimensions: null,
     }));
 
-    newImages.forEach((image) => {
-      const img = new Image();
-      img.onload = () => {
-        image.dimensions = {
-          width: img.width,
-          height: img.height,
-        };
-        setImages((prev) => [...prev, image]);
-      };
-      img.src = image.preview;
+    const loadImagesWithDimensions = newImages.map(
+      (image) =>
+        new Promise((resolve) => {
+          const img = new Image();
+          img.onload = () => {
+            image.dimensions = {
+              width: img.width,
+              height: img.height,
+            };
+            resolve(image);
+          };
+          img.src = image.preview;
+        })
+    );
+
+    Promise.all(loadImagesWithDimensions).then((resolvedImages) => {
+      setImages((prev) => [...prev, ...resolvedImages]);
     });
 
-    console.log(newImages);
+    console.log(images);
   };
 
   return (
@@ -205,6 +237,13 @@ const Inventory = () => {
               </div>
             </div>
           </div>
+          <button
+            className="mt-10 px-6 py-2 bg-green-600 hover:bg-green-700 rounded-lg font-bold text-white"
+            onClick={uploadImages}
+            type="button"
+          >
+            Submit
+          </button>
         </motion.div>
       </motion.div>
     </>

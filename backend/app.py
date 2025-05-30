@@ -8,13 +8,17 @@ from models.user import create_user,serialize_user
 load_dotenv()
 
 app = Flask(__name__)
-CORS(app)
+CORS(app,origins=["http://localhost:5173"], supports_credentials=True)
 
 MONGO_URI = os.getenv("MONGO_URI")
 # print("MONGO_URI:", MONGO_URI)
 
 app.config["MONGO_URI"] = MONGO_URI
+# client=PyMongo.MongoClient(MONGO_URI)
 mongo = PyMongo(app)
+db=mongo.db
+collections=db["images"]
+# print("collections",collections)
 
 # Add user route
 @app.route('/user/signup', methods=['POST'])
@@ -48,6 +52,14 @@ def login_user():
         return jsonify({"message":"user not found","success":False}),404
 
     return jsonify({"message":"Login Successful","email":email,"password":password}),201 
+
+@app.route("/upload", methods=["POST"])
+def upload():
+    files = request.files.getlist("images")
+    print("Received files:", [f.filename for f in files])
     
+    return jsonify({"message": f"{len(files)} file(s) received"}), 200
+
+
 if __name__ == '__main__':
     app.run(debug=True,port=8000)
